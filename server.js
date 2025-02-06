@@ -32,12 +32,8 @@ app.post("/register", (req, res) => {
     const users = JSON.parse(data);
 
     // Check if the username or email already exists
-    if (
-      users.find((user) => user.username === username || user.email === email)
-    ) {
-      return res
-        .status(400)
-        .json({ message: "Username or email already exists" });
+    if (users.find((user) => user.email === email)) {
+      return res.status(400).json({ message: "Email already exists" });
     }
 
     // Add the new user to the array
