@@ -1,0 +1,32 @@
+.order-success-container {
+  padding: 20px;
+  text-align: center;
+}
+
+.order-details {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.order-item {
+  display: flex;
+  gap: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.order-item img {
+  width: 100px;
+  height: auto;
+  border-radius: 10px;
+}
+
+.order-item-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
