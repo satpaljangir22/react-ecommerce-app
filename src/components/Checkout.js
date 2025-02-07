@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./Checkout.css";
 
@@ -6,6 +6,14 @@ function Checkout() {
   const location = useLocation();
   const navigate = useNavigate();
   const { cart } = location.state || { cart: [] };
+
+  useEffect(() => {
+    // Redirect to cart if no items
+    if (!cart || cart.length === 0) {
+      navigate("/cart");
+    }
+    console.log("Cart data:", cart); // Debug log
+  }, [cart, navigate]);
 
   const productQuantities = cart.reduce((acc, product) => {
     const existingProduct = acc.find((item) => item.id === product.id);
@@ -23,8 +31,18 @@ function Checkout() {
   );
 
   const handlePayment = () => {
-    navigate("/payments");
+    navigate("/payments", {
+      state: {
+        cart: cart,
+        totalAmount: totalAmount,
+      },
+    });
   };
+
+  // Add loading state check
+  if (!cart || cart.length === 0) {
+    return <div className="checkout-container">Loading...</div>;
+  }
 
   return (
     <div className="checkout-container">

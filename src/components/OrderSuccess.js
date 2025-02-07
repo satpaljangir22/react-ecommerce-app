@@ -1,10 +1,44 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import "./OrderSuccess.css";
 
 function OrderSuccess() {
   const location = useLocation();
-  const { cart, orderNumber } = location.state || { cart: [], orderNumber: "" };
+  const { cart, orderNumber, userId } = location.state || {
+    cart: [],
+    orderNumber: "",
+    userId: null,
+  };
+
+  useEffect(() => {
+    const saveOrder = async () => {
+      try {
+        const totalAmount = cart.reduce((sum, item) => sum + item.price, 0);
+
+        const response = await fetch("http://localhost:5001/api/orders", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId,
+            products: cart,
+            totalAmount,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to save order");
+        }
+      } catch (error) {
+        console.error("Error saving order:", error);
+      }
+    };
+
+    if (cart.length > 0 && userId) {
+      saveOrder();
+    }
+  }, [cart, userId]);
 
   return (
     <div className="order-success-container">
