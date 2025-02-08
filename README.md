@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# E-Commerce React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is an E-Commerce application built with React. It includes features such as user registration, login, password management, and order processing.
 
 ## Available Scripts
 
@@ -27,8 +27,6 @@ It correctly bundles React in production mode and optimizes the build for the be
 The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
 ### `npm run eject`
 
 **Note: this is a one-way operation. Once you `eject`, you can't go back!**
@@ -37,34 +35,52 @@ If you aren't satisfied with the build tool and configuration choices, you can `
 
 Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Details of Design
 
-## Learn More
+The application is designed with a focus on user experience and ease of use. It includes the following main components:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- **Login**: Allows users to log in with their email and password. If the credentials are correct, an OTP is sent to the user's email for verification.
+- **Change Password**: Allows users to change their password by providing their current password and a new password.
+- **Forgot Password**: Allows users to reset their password by providing their email. A new random password is sent to the user's email.
+- **Order Success**: Displays the order details and a success message after an order is placed.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Architecture Microservices
 
-### Code Splitting
+The application follows a microservices architecture with the following services:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- **User Service**: Manages user registration, login, and password management.
+- **Order Service**: Manages order creation and retrieval.
+- **Email Service**: Handles sending emails for OTP and password reset.
 
-### Analyzing the Bundle Size
+Each service is implemented as a separate module and communicates with the others through REST APIs.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Database Scripts
 
-### Making a Progressive Web App
+The application uses MongoDB as the database. Below are the scripts to create the necessary collections and indexes:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```javascript
+// User Schema
+const userSchema = new mongoose.Schema({
+  username: String,
+  email: { type: String, unique: true },
+  password: String,
+  otp: String,
+  otpExpires: Date,
+});
 
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+// Order Schema
+const orderSchema = new mongoose.Schema({
+  orderNumber: { type: String, unique: true },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  products: [
+    {
+      name: String,
+      description: String,
+      price: Number,
+      image: String,
+    },
+  ],
+  totalAmount: Number,
+  createdAt: { type: Date, default: Date.now },
+});
+```
