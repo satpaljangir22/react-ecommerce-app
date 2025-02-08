@@ -211,6 +211,72 @@ app.post("/verify-otp", async (req, res) => {
   }
 });
 
+// Change Password endpoint
+app.post("/change-password", async (req, res) => {
+  const { email, currentPassword, newPassword } = req.body;
+
+  try {
+    // Find a user with the provided email and current password
+    const user = await User.findOne({ email, password: currentPassword });
+
+    if (!user) {
+      return res
+        .status(401)
+        .json({ message: "Invalid email or current password." });
+    }
+
+    // Update the user's password with the new password
+    user.password = newPassword;
+    await user.save();
+
+    res.status(200).json({ message: "Password changed successfully." });
+  } catch (err) {
+    res.status(500).json({ message: "Error updating password", err });
+  }
+});
+
+// Forgot Password endpoint
+app.post("/forgot-password", async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    // Find the user by email
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "Email not registered." });
+    }
+
+    // Generate a random 6-character password
+    const newPassword = Math.random().toString(36).slice(-6);
+    user.password = newPassword;
+    await user.save();
+
+    // Send the reset password email
+    const mailOptions = {
+      from: "genai@admin.com", // Replace with your actual sender email if needed
+      to: user.email,
+      subject: "Password Reset",
+      text: `Your new password is ${newPassword}`,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error("Error sending reset email:", error);
+        return res
+          .status(500)
+          .json({ message: "Failed to send reset email.", error });
+      } else {
+        console.log("Reset email sent:", info.response);
+        return res
+          .status(200)
+          .json({ message: "Reset email sent successfully." });
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Server error.", err });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

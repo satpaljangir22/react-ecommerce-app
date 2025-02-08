@@ -129,6 +129,11 @@ function Login() {
         )}
         <button type="submit">{step === 1 ? "Next" : "Login"}</button>
       </form>
+      <div className="extra-links">
+        <Link to="/change-password">Change Password</Link>
+        <span> | </span>
+        <Link to="/forgot-password">Forgot Password</Link>
+      </div>
       <p className="register-link">
         Don't have an account? <Link to="/registration">Register here</Link>
       </p>

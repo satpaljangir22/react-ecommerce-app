@@ -13,6 +13,8 @@ import Checkout from "./components/Checkout";
 import Payments from "./components/Payments";
 import OrderSuccess from "./components/OrderSuccess";
 import RegistrationSuccess from "./components/RegistrationSuccess";
+import ChangePassword from "./components/ChangePassword";
+import ForgotPassword from "./components/ForgotPassword"; // Assuming you have this component
 
 function App() {
   return (
@@ -29,6 +31,8 @@ function App() {
             path="/registration-success"
             element={<RegistrationSuccess />}
           />
+          <Route path="/change-password" element={<ChangePassword />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/" element={<Navigate to="/login" />} />{" "}
           {/* Default route */}
         </Routes>

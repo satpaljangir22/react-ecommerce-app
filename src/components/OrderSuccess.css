@@ -30,3 +30,19 @@
   flex-direction: column;
   justify-content: center;
 }
+
+.continue-shopping {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.continue-shopping a {
+  color: #007bff;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.continue-shopping a:hover {
+  text-decoration: underline;
+}

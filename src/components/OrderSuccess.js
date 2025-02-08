@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import "./OrderSuccess.css";
 
 function OrderSuccess() {
@@ -56,6 +56,9 @@ function OrderSuccess() {
             </div>
           </div>
         ))}
+      </div>
+      <div className="continue-shopping">
+        <Link to="/home">Continue Shopping</Link>
       </div>
     </div>
   );
